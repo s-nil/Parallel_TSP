@@ -11,5 +11,9 @@ class listNode
 public:
     listNode();
     ~listNode();
+    listNode *getPrev();
+    listNode *getNext();
+    void setPrev(listNode *);
+    void setNext(listNode *);
 
 };
