@@ -2,11 +2,10 @@
 
 listNode::listNode()
 {
-  this->data = nullptr;
-  this->prev = nullptr;
-  this->next = nullptr;
+  data = nullptr;
+  prev = nullptr;
+  next = nullptr;
 }
-
 
 
 listNode::~listNode()
