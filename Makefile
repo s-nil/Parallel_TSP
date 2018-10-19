@@ -4,8 +4,11 @@ MPIC=mpic++
 
 all: a
 
-a: main.o list.o listNode.o
-	${MPIC} -o tsp main.o list.o listNode.o
+a: main.o list.o listNode.o graph.o
+	${MPIC} -o tsp main.o list.o listNode.o graph.o
+
+graph: graph.cpp
+	${MPIC} -c graph.cpp
 
 list: list.cpp
 	${MPIC} -c list.cpp
