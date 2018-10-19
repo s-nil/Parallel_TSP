@@ -2,14 +2,24 @@
 
 listNode::listNode()
 {
-  data = 0;
+  this->data = 0;
   prev = 0;
   next = 0;
 }
 
 listNode::~listNode()
 {
+  
+}
 
+void *listNode::getData()
+{
+  return data;
+}
+
+void listNode::setData(void *data)
+{
+  this->data = data;
 }
 
 void listNode::setPrev(listNode *node)
