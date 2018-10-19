@@ -5,8 +5,20 @@
 #include <getopt.h>
 #include "graph.h"
 #include <cstdlib>
+#include "listNode.h"
 
 using namespace std;
+
+void masterWork(int rank)
+{
+  cout << 'a' << '\n';
+}
+
+void slaveWork(int rank)
+{
+  cout << 'b' << '\n';
+  
+}
 
 int main(int argc, char** argv)
 {
@@ -54,16 +66,22 @@ int main(int argc, char** argv)
 
   MPI_Datatype matrixType;
   graph *grp;
+  listNode *node = new listNode();
+
+  int a = 2;
+  node->setData(&a);
 
   if(rank == 0)
   {
     grp = new graph(numNodes,filename);
+
     matrix = grp->getMatrix();
 
     MPI_Type_contiguous(numNodes*numNodes, MPI_INT, &matrixType);
     MPI_Type_commit(&matrixType);
     MPI_Bcast(matrix, 1, matrixType, 0, MPI_COMM_WORLD);
 
+    masterWork(rank);
   }
   else
   {
@@ -71,14 +89,17 @@ int main(int argc, char** argv)
 
     MPI_Type_contiguous(numNodes*numNodes, MPI_INT, &matrixType);
     MPI_Type_commit(&matrixType);
-    matrix = grp->getMatrix();
+    matrix = new int(numNodes*numNodes);
     MPI_Bcast(matrix, 1, matrixType, 0, MPI_COMM_WORLD);
 
     grp->setNumNodes(numNodes);
     grp->setMatrix(matrix);
 
+    slaveWork(rank);
   }
 
 
+  MPI_Abort(MPI_COMM_WORLD,911);
+  //MPI_Finalize();
   return 0;
 }

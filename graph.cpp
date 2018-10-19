@@ -19,13 +19,13 @@ graph::graph(int numNodes, char * filename)
 
 graph::~graph()
 {
-
+  
 }
 
 void graph::printMatrix()
 {
   for (int i = 0;i < numNodes; ++i) {
-    for (int j = 0; i < numNodes; ++j) {
+    for (int j = 0; j < numNodes; ++j) {
       cout << matrix[numNodes * i + j] << ' ';
     }
     cout << '\n';
@@ -42,12 +42,13 @@ void graph::setNumNodes(int n)
   numNodes = n;
 }
 
-int * graph::getMatrix()
+int *graph::getMatrix()
 {
   return matrix;
 }
 
 void graph::setMatrix(int *matrix)
 {
+  delete this->matrix;
   this->matrix = matrix;
 }

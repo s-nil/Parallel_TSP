@@ -2,9 +2,9 @@
 
 list::list()
 {
-  head = 0;
-  tail = 0;
-  itemCount = 0;
+  this->head = 0;
+  this->tail = 0;
+  this->itemCount = 0;
 }
 
 list::~list()
@@ -30,7 +30,7 @@ void list::EnqueueNode(listNode *node)
 
 listNode *list::Dequeue()
 {
-  listNode *n = 0;
+  listNode *n = new listNode();
   n = this->head;
   if(this->itemCount == 1)
   {
@@ -59,4 +59,14 @@ int list::getItemCount()
 void list::setItemCount(int itemCount)
 {
   this->itemCount = itemCount;
+}
+
+listNode *list::getHead()
+{
+  return head;
+}
+
+listNode *list::getTail()
+{
+  return tail;
 }
