@@ -1,3 +1,6 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include <iostream>
 #include <fstream>
 
@@ -17,3 +20,5 @@ public:
   int *getMatrix();
   void setMatrix(int *);
 };
+
+#endif // GRAPH_H

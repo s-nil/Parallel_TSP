@@ -1,3 +1,6 @@
+#ifndef LIST_H
+#define LIST_H
+
 #include <iostream>
 #include "listNode.h"
 
@@ -15,4 +18,9 @@ public:
   listNode *Dequeue();
   int getItemCount();
   void setItemCount(int itemCount);
+  listNode *getHead();
+  listNode *getTail();
+
 };
+
+#endif // LIST_H
