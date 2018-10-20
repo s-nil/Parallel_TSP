@@ -6,18 +6,50 @@
 #include "graph.h"
 #include <cstdlib>
 #include "listNode.h"
+#include "task.h"
+#define TASK_TAG 1
+#define AVAILABLE_TAG 2
+#define FINALIZE_TAG 3
 
 using namespace std;
 
-void masterWork(int rank)
+void masterWork(graph *grp)
 {
-  cout << 'a' << '\n';
+  MPI_Status status;
+  task *t,*tt, *tasks;
+  listNode *node;
+  list *taskList, *availableWorkers;
+  int globalMIN = INT_MAX;
+  int num = 1;
+  int n = grp->getNumNodes();
+
+  taskList = new list;
+  availableWorkers = new list;
+
+  for (int i = 0; i < n-1; ++i) {
+    t = new task(n);
+    t->setCityToVisit(i+1);
+    t->setGlobalMIN(INT_MAX);
+    t->setPartialMIN(0);
+    t->setVisitedCount(1);
+    node = new listNode;
+    node->setData(t);
+    taskList->EnqueueNode(node);
+  }
+
+
+  //MPI_Send(void* data,int count,MPI_Datatype datatype,int destination,int tag,MPI_Comm communicator)
+  MPI_Send(&num,1,MPI_INT,1, 0,MPI_COMM_WORLD);
 }
 
-void slaveWork(int rank)
+void slaveWork(graph *grp,int rank)
 {
-  cout << 'b' << '\n';
-  
+  int num;
+  //MPI_Recv(void* data,int count,MPI_Datatype datatype,int source,int tag,MPI_Comm communicator,MPI_Status* status)
+  MPI_Recv(&num,1, MPI_INT,0,0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+  listNode *node = new listNode();
+
+
 }
 
 int main(int argc, char** argv)
@@ -66,10 +98,8 @@ int main(int argc, char** argv)
 
   MPI_Datatype matrixType;
   graph *grp;
-  listNode *node = new listNode();
+  listNode *node = new listNode;
 
-  int a = 2;
-  node->setData(&a);
 
   if(rank == 0)
   {
@@ -81,7 +111,7 @@ int main(int argc, char** argv)
     MPI_Type_commit(&matrixType);
     MPI_Bcast(matrix, 1, matrixType, 0, MPI_COMM_WORLD);
 
-    masterWork(rank);
+    masterWork(grp);
   }
   else
   {
@@ -95,7 +125,7 @@ int main(int argc, char** argv)
     grp->setNumNodes(numNodes);
     grp->setMatrix(matrix);
 
-    slaveWork(rank);
+    slaveWork(grp,rank);
   }
 
 
