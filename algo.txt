@@ -1,0 +1,76 @@
+data structures used:
+	1. task:
+		visited array for storing current sequence of visitrd cities.
+		city to visit next
+		number of city visited
+		cost of visiting these cities(partialMIN)
+		longMin
+
+	2. a queue(linked list)
+	3. linked list node with data reffering to task
+	4. a global MINCost
+	5. queue for available slaves
+	6. best Route array : to store the best route
+
+input:
+matrix: adjacency matrix for the given graph
+n: number of nodes in the graph
+N: number of processes to run parallelly
+
+parallel_tsp(matrix, n, N)
+{
+	Master(rank 0):
+		1. create n-1 tasks to visit 1....(n-1) cities parallelly
+		2. Put these tasks in a taskQueue
+		3. while (all workers are not available and taskQueue in not empty)
+		4. 		wait for a slave to send a msg
+		5. 		if (received msg is available msg)
+		6.			if (there is any task in taskQueue)
+		7.				remove task from taskQueue
+		8.				update task.longMin = global MINCost
+		9.				send task to slave who sent available msg
+		10.    		else
+		11.    			add slave in available slaves list
+		12.   		else if (received msg is task msg)
+		13.   			count the children tasks sent by slave
+		14.   			foreach task
+		15.				if (number of city visited in the task > n) 
+		16.	   				if (globalMINCost > task.partialMIN)
+		17.	   					globalMINCost = task.partialMIN
+		18.	   					add the visited array to best route
+		19.	   			else
+		20.	   				enqueue task in taskQueue
+		21.	   		if (there is any worker in available slaves list and there is any task in taskQueue)
+		22.	   			remove a task from taskQueue
+		23.	   			remove a worker from available slaves list
+		24.	   			update task.longMin = globalMINCost
+		25.	   			asssign the removed task to removed worker
+		26.if (available slaves list is empty)
+		27.		send a final msg to each worker
+		28.return best Route
+
+	Slave(other ranks):
+		1. while(1)
+		2. 		send available msg to master
+		3.		receive a msg from master
+		4.		if (final msg)
+		5.			break the loop
+		//it is a task msg
+		6.		if(task.cityVisited >= n)
+		7. 			//all cities visited, go back to source
+		8.			add cost of last city visited and source to task.partialMIN
+		9.			increse task.visitcount
+		10.			if (task.partialMIN < task.longMin)
+		11.				send this task to master with task msg
+		12.		else
+		13.			add cost of last city visited and city to visit to task.partialMIN
+		14.			add this recently visited city in visited array
+		15.			increse task.visitcount
+		16.			if(task.partialMIN < task.longMin)
+		17.				find remaining cities to visit
+		18.				if > 0
+		19.					make that many children tasks with same info but different citytovisit
+		20.					send each task to master one by one with task msg
+		21.				else
+		22.					send this task to master with task msg
+}
