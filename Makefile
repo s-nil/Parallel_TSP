@@ -4,8 +4,11 @@ CPPFLAGS=-c -Wall
 
 all: a
 
-a: main.o list.o listNode.o graph.o
-	${MPIC} -o tsp main.o list.o listNode.o graph.o
+a: main.o list.o listNode.o graph.o task.o
+	${MPIC} -o tsp main.o list.o listNode.o graph.o task.o
+
+task: task.cpp
+	${MPIC} ${CPPFLAGS} task.cpp
 
 graph: graph.cpp
 	${MPIC} ${CPPFLAGS} graph.cpp
