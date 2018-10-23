@@ -9,7 +9,7 @@ graph::graph()
 graph::graph(int numNodes, char * filename)
 {
   this->numNodes = numNodes;
-  this->matrix = new int(numNodes*numNodes);
+  this->matrix = new int[numNodes*numNodes];
   ifstream ifs(filename);
   for (int i = 0; i < numNodes * numNodes; ++i ) {
     ifs >> matrix[i];
@@ -19,7 +19,7 @@ graph::graph(int numNodes, char * filename)
 
 graph::~graph()
 {
-  
+
 }
 
 void graph::printMatrix()
@@ -49,6 +49,6 @@ int *graph::getMatrix()
 
 void graph::setMatrix(int *matrix)
 {
-  delete this->matrix;
+  delete [] this->matrix;
   this->matrix = matrix;
 }
