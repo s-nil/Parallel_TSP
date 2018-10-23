@@ -1,11 +1,11 @@
-EXECS=main list listNode
 MPIC=mpic++
 CPPFLAGS=-c -Wall
+PROGRAM=tsp
 
 all: a
 
-a: main.o list.o listNode.o graph.o
-	${MPIC} -o tsp main.o list.o listNode.o graph.o
+a: list.o listNode.o graph.o
+	${MPIC} main.cpp list.o listNode.o graph.o -o ${PROGRAM}
 
 graph: graph.cpp
 	${MPIC} ${CPPFLAGS} graph.cpp
@@ -14,10 +14,7 @@ list: list.cpp
 	${MPIC} ${CPPFLAGS} list.cpp
 
 listNode: listNode.cpp
-	${MPIC} ${CPPFLAGS} -c listNode.cpp
-
-main: main.cpp
-	${MPIC} ${CPPFLAGS} -c main.cpp
+	${MPIC} ${CPPFLAGS} listNode.cpp
 
 clean:
 	rm -rf *o tsp
